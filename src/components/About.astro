@@ -1,0 +1,154 @@
+---
+import siteData from '../data/site.json';
+
+const { portrait, about } = siteData;
+---
+
+<section id="about" class="relative py-16 md:py-20 overflow-hidden">
+  <div class="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+      <!-- Image with aesthetic frame -->
+      <div class="animate-on-scroll fade-left">
+        <div class="relative max-w-sm mx-auto lg:mx-0">
+          <!-- Outer decorative frame -->
+          <div class="absolute -inset-3 border border-[var(--color-accent)]/20 rounded-2xl"></div>
+          <div class="absolute -inset-1.5 border border-[var(--color-accent)]/10 rounded-xl"></div>
+          <!-- Corner accents -->
+          <div class="absolute -top-1 -left-1 w-6 h-6 border-t-2 border-l-2 border-[var(--color-accent)] rounded-tl-lg"></div>
+          <div class="absolute -top-1 -right-1 w-6 h-6 border-t-2 border-r-2 border-[var(--color-accent)] rounded-tr-lg"></div>
+          <div class="absolute -bottom-1 -left-1 w-6 h-6 border-b-2 border-l-2 border-[var(--color-accent)] rounded-bl-lg"></div>
+          <div class="absolute -bottom-1 -right-1 w-6 h-6 border-b-2 border-r-2 border-[var(--color-accent)] rounded-br-lg"></div>
+
+          <div class="relative aspect-[3/4] overflow-hidden rounded-xl bg-[var(--color-bg-secondary)] about-image-container">
+            <img
+              src={portrait.src}
+              srcset={portrait.srcset}
+              sizes="(min-width: 1024px) 384px, (min-width: 430px) 384px, 85vw"
+              decoding="async"
+              alt={portrait.alt}
+              class="w-full h-full object-cover about-image"
+              loading="lazy"
+              width="1080"
+              height="1080"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-[var(--color-bg)]/40 via-transparent to-transparent"></div>
+            <!-- Border animation overlay -->
+            <div class="absolute inset-0 border-animation opacity-0 transition-opacity duration-500"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Content -->
+      <div>
+        <p class="text-[var(--color-accent)] text-xs font-semibold tracking-[0.2em] uppercase mb-3 animate-on-scroll" data-reveal="fade-up">About</p>
+        <h2 class="font-display text-[clamp(2rem,4vw,3.5rem)] leading-[0.9] tracking-wide text-[var(--color-text)] mb-5" data-reveal="line">
+          {about.heading}
+        </h2>
+        <div class="space-y-4 text-[var(--color-text-muted)] text-base leading-relaxed max-w-lg" data-reveal-stagger>
+          {about.paragraphs.map((paragraph) => <p data-reveal="fade-up">{paragraph}</p>)}
+        </div>
+
+        <div class="mt-8 pt-5 border-t border-[var(--color-border)] animate-on-scroll">
+          <p class="davinci-badge text-[var(--color-accent)] text-sm font-medium tracking-wide flex items-center gap-2 w-fit px-3 py-1.5 rounded-full bg-[var(--color-accent)]/5 border border-[var(--color-accent)]/15">
+            <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M12 6v6l4 2"/>
+            </svg>
+            {about.tool}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Marquee Ticker -->
+  <div class="mt-12 md:mt-16 relative overflow-hidden py-4 bg-[var(--color-bg-secondary)]/50 border-y border-[var(--color-border)]">
+    <div class="marquee-text flex whitespace-nowrap w-max" aria-hidden="true">
+      <span class="text-[var(--color-accent)]/80 text-xs font-semibold tracking-[0.15em] uppercase px-4">
+        {about.ticker.join(' · ').toUpperCase()} ·
+      </span>
+      <span class="text-[var(--color-accent)]/80 text-xs font-semibold tracking-[0.15em] uppercase px-4">
+        {about.ticker.join(' · ').toUpperCase()} ·
+      </span>
+    </div>
+  </div>
+</section>
+
+<style>
+  .about-image-container {
+    position: relative;
+  }
+
+  :global(.js) .about-image-container:not(.revealed) .about-image {
+    clip-path: inset(100% 0 0 0);
+  }
+
+  .about-image-container.revealed .about-image {
+    clip-path: inset(0% 0 0 0);
+  }
+
+  .about-image {
+    clip-path: inset(0);
+    transition: clip-path 0.8s var(--ease-out-expo);
+  }
+
+  .border-animation {
+    position: absolute;
+    inset: 0;
+    border: 2px solid var(--color-accent);
+    border-radius: inherit;
+    animation: border-glow 2s ease-in-out infinite;
+  }
+
+  .about-image-container:hover .border-animation {
+    opacity: 1;
+  }
+
+  @keyframes border-glow {
+    0%, 100% { box-shadow: 0 0 0 rgba(200, 169, 107, 0); }
+    50% { box-shadow: 0 0 12px rgba(200, 169, 107, 0.4); }
+  }
+
+  .davinci-badge {
+    animation: badge-pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes badge-pulse {
+    0%, 100% { box-shadow: 0 0 0 rgba(200, 169, 107, 0); }
+    50% { box-shadow: 0 0 8px rgba(200, 169, 107, 0.25); }
+  }
+
+  .marquee-text {
+    animation: marquee-scroll 30s linear infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .about-image {
+      clip-path: inset(0);
+    }
+    .davinci-badge,
+    .marquee-text {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    // Image reveal animation
+    const imageContainer = document.querySelector('.about-image-container');
+    if (imageContainer) {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              imageContainer.classList.add('revealed');
+            }, 200);
+            observer.disconnect();
+          }
+        });
+      }, { threshold: 0.2, rootMargin: '0px 0px -50px 0px' });
+      observer.observe(imageContainer);
+    }
+  })();
+</script>

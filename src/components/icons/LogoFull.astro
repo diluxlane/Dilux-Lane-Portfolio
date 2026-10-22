@@ -1,0 +1,12 @@
+---
+import site from '../../data/site.json';
+interface Props { size?: number | string; color?: string; class?: string; }
+const { size = 24, color = 'currentColor', class: className = '' } = Astro.props;
+---
+<span class={`inline-flex items-center gap-2.5 ${className}`} style={`color:${color}`}>
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <circle cx="12" cy="12" r="10.5" stroke="var(--color-accent)" />
+    <rect x="8" y="8" width="8" height="8" rx="1" stroke="var(--color-accent)" />
+  </svg>
+  <span class="font-display text-base tracking-[0.15em] whitespace-nowrap">{site.name.toUpperCase()}</span>
+</span>

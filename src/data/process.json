@@ -1,0 +1,27 @@
+[
+  {
+    "num": "01",
+    "title": "Brief & Discovery",
+    "desc": "We start with a conversation about your goals, audience, and the story you want told."
+  },
+  {
+    "num": "02",
+    "title": "Concept & Plan",
+    "desc": "A clear plan — storyboard, shot selection, and pacing mapped out before editing begins."
+  },
+  {
+    "num": "03",
+    "title": "Production",
+    "desc": "Editing and assembly — with regular check-ins so nothing goes off track."
+  },
+  {
+    "num": "04",
+    "title": "Refinement",
+    "desc": "Colour grading and sound design, refined based on your feedback."
+  },
+  {
+    "num": "05",
+    "title": "Delivery",
+    "desc": "Final edited files handed over, ready to publish."
+  }
+]

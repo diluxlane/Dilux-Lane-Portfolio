@@ -1,0 +1,99 @@
+<dialog id="video-lightbox" class="media-dialog" aria-labelledby="video-lightbox-title" aria-describedby="video-dialog-help">
+  <div class="lightbox-content">
+    <h2 id="video-lightbox-title" class="sr-only">Portfolio video</h2>
+    <p id="video-dialog-help" class="sr-only">Use Close video to return to the portfolio. Embedded players handle their own keys; tab back to the dialog controls before using Escape.</p>
+    <button class="lightbox-close" id="lightbox-close-btn" aria-label="Close video">&times;</button>
+    <div id="lightbox-video-container" />
+    <div class="media-fallback">
+      <p id="media-status" role="status">Loading video…</p>
+      <a id="media-original" target="_blank" rel="noopener noreferrer">Open original video ↗</a>
+    </div>
+  </div>
+</dialog>
+<style>
+  .media-dialog { position: fixed; inset: 0; margin: auto; padding: 0; border: 0; background: transparent; color: var(--color-text); max-width: calc(100vw - 24px); max-height: 90dvh; overflow: visible; }
+  .media-dialog::backdrop { background: rgba(0,0,0,.88); backdrop-filter: blur(8px); }
+  .media-dialog .lightbox-content { width: min(420px, calc(100vw - 24px)); height: min(760px, 88dvh); max-height: 88dvh; display: flex; flex-direction: column; transform: none; }
+  .media-fallback { flex-shrink: 0; padding: .75rem 1rem; font-size: .75rem; background: var(--color-bg-secondary); }
+  .media-fallback a { color: var(--color-accent); text-decoration: underline; }
+  .media-fallback p { color: var(--color-text-muted); margin-bottom: .25rem; }
+  #lightbox-video-container { flex: 1; min-height: 0; }
+  #lightbox-video-container :global(video) { width: 100%; height: 100%; object-fit: contain; }
+</style>
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>('#video-lightbox');
+  const closeButton = document.querySelector<HTMLButtonElement>('#lightbox-close-btn');
+  const container = document.querySelector<HTMLDivElement>('#lightbox-video-container');
+  const title = document.getElementById('video-lightbox-title');
+  const original = document.querySelector<HTMLAnchorElement>('#media-original');
+  const status = document.getElementById('media-status');
+  let trigger: HTMLAnchorElement | null = null;
+  let timeout: ReturnType<typeof setTimeout> | undefined;
+
+  const embedUrl = (raw: string, platform: string) => {
+    const url = new URL(raw, location.origin);
+    if (!['https:', 'http:'].includes(url.protocol)) return null;
+    const host = url.hostname.replace(/^www\./, '');
+    if (platform === 'youtube' && ['youtube.com', 'youtu.be'].includes(host)) {
+      const id = host === 'youtu.be' ? url.pathname.slice(1) : url.searchParams.get('v') || url.pathname.split('/')[2];
+      return id && /^[\w-]{11}$/.test(id) ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0` : null;
+    }
+    if (platform === 'instagram' && host === 'instagram.com') {
+      const match = url.pathname.match(/^\/(?:reel|p|tv)\/([\w-]+)\/?$/);
+      return match ? `https://www.instagram.com/p/${match[1]}/embed/` : null;
+    }
+    if (platform === 'video' && url.origin === location.origin && /\.(mp4|webm)$/i.test(url.pathname)) return url.href;
+    return null;
+  };
+
+  document.addEventListener('click', (event) => {
+    if (!(event.target instanceof Element)) return;
+    const card = event.target.closest<HTMLAnchorElement>('a[data-video-id]');
+    if (!card || !dialog || !container || !original || !status || !title || dialog.open) return;
+    const platform = card.dataset.platform || '';
+    let source: string | null = null;
+    try { source = embedUrl(card.href, platform); } catch { return; }
+    if (!source) return; // Normal anchor fallback for unsupported URLs.
+    event.preventDefault();
+    trigger = card;
+    title.textContent = card.dataset.title || 'Portfolio video';
+    original.href = card.href;
+    status.textContent = 'Loading video…';
+    container.replaceChildren();
+    const loaded = () => { if (status) status.textContent = 'If playback is unavailable, open the original video.'; };
+    if (platform === 'video') {
+      const video = document.createElement('video');
+      video.src = source; video.controls = true; video.playsInline = true; video.preload = 'metadata';
+      video.addEventListener('loadeddata', loaded);
+      video.addEventListener('error', loaded);
+      container.append(video);
+    } else {
+      const iframe = document.createElement('iframe');
+      iframe.src = source; iframe.title = title.textContent;
+      iframe.allow = 'autoplay; encrypted-media; picture-in-picture';
+      iframe.allowFullscreen = true; iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+      iframe.addEventListener('load', loaded);
+      container.append(iframe);
+    }
+    timeout = window.setTimeout(loaded, 8000);
+    dialog.showModal();
+    document.body.classList.add('lightbox-open');
+    closeButton?.focus();
+  });
+  const releaseMedia = () => {
+    window.clearTimeout(timeout);
+    container?.replaceChildren();
+  };
+  const close = () => {
+    releaseMedia();
+    dialog?.close();
+  };
+  closeButton?.addEventListener('click', close);
+  dialog?.addEventListener('click', (event) => { if (event.target === dialog) close(); });
+  dialog?.addEventListener('cancel', releaseMedia);
+  dialog?.addEventListener('close', () => {
+    releaseMedia(); // Stops playback and releases remote resources.
+    document.body.classList.remove('lightbox-open');
+    trigger?.focus();
+  });
+</script>

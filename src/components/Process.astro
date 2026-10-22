@@ -1,0 +1,139 @@
+---
+import steps from '../data/process.json';
+---
+
+<section id="process" class="py-16 md:py-20 lg:py-24 bg-[var(--color-bg-secondary)]/30">
+  <div class="max-w-[1440px] mx-auto px-6 md:px-12 lg:px-20">
+    <div class="text-center mb-10 md:mb-14" data-reveal="fade-up">
+      <p class="text-[var(--color-accent)] text-xs font-semibold tracking-[0.2em] uppercase mb-3">Process</p>
+      <h2 class="font-display text-[clamp(2rem,4vw,3rem)] leading-[0.9] tracking-wide text-[var(--color-text)]">
+        HOW WE WORK
+      </h2>
+    </div>
+
+    <!-- Mobile / Tablet: Vertical Process Cards -->
+    <div class="lg:hidden max-w-2xl mx-auto">
+      <div class="relative">
+        <!-- Vertical connector line -->
+        <div class="absolute left-[19px] top-6 bottom-6 w-0.5 bg-gradient-to-b from-[var(--color-accent)]/30 via-[var(--color-accent)]/20 to-[var(--color-accent)]/5"></div>
+
+        <div class="space-y-6" data-reveal-stagger>
+          {steps.map((step) => (
+            <div
+              class="process-card relative pl-14 p-5 rounded-2xl bg-[var(--color-bg-secondary)]/50 border border-[var(--color-border)] transition-all duration-400 hover:border-[var(--color-accent)]/20 hover:bg-[var(--color-bg-secondary)]/80"
+              data-reveal="fade-up"
+            >
+              <!-- Step number circle -->
+              <div class="absolute left-0 top-5 w-10 h-10 rounded-full bg-[var(--color-bg)] border-2 border-[var(--color-accent)] flex items-center justify-center">
+                <span class="font-mono text-[10px] font-semibold text-[var(--color-accent)]">
+                  {step.num}
+                </span>
+              </div>
+
+              <!-- Content -->
+              <div>
+                <h3 class="font-display text-base md:text-lg tracking-wide text-[var(--color-text)] uppercase mb-1.5">
+                  {step.title}
+                </h3>
+                <p class="text-[var(--color-text-muted)] text-sm leading-relaxed">
+                  {step.desc}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+
+    <!-- Desktop: Horizontal Timeline -->
+    <div class="hidden lg:block">
+      <div class="relative">
+        <!-- Horizontal connector line -->
+        <div class="absolute left-0 right-0 top-[19px] h-0.5 bg-gradient-to-r from-[var(--color-accent)]/30 via-[var(--color-accent)]/20 to-[var(--color-accent)]/30"></div>
+
+        <div class="grid grid-cols-5 gap-4" data-reveal-stagger>
+          {steps.map((step, i) => (
+            <div
+              class="process-card relative text-center"
+              data-reveal="fade-up"
+              style={`transition-delay: ${i * 100}ms;`}
+            >
+              <!-- Step number circle -->
+              <div class="relative z-10 w-10 h-10 mx-auto mb-5 rounded-full bg-[var(--color-bg)] border-2 border-[var(--color-accent)] flex items-center justify-center">
+                <span class="font-mono text-[10px] font-semibold text-[var(--color-accent)]">
+                  {step.num}
+                </span>
+              </div>
+
+              <!-- Content -->
+              <div class="p-4 rounded-xl bg-[var(--color-bg-secondary)]/50 border border-[var(--color-border)] transition-all duration-400 hover:border-[var(--color-accent)]/20 hover:bg-[var(--color-bg-secondary)]/80">
+                <h3 class="font-display text-sm tracking-wide text-[var(--color-text)] uppercase mb-2">
+                  {step.title}
+                </h3>
+                <p class="text-[var(--color-text-muted)] text-xs leading-relaxed">
+                  {step.desc}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .process-card {
+  }
+
+  /* Animated progress line on cards */
+  .process-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 2px;
+    height: 0;
+    background: var(--color-accent);
+    border-radius: 2px;
+    transition: height 0.4s var(--ease-out-expo);
+  }
+
+  .process-card:hover::before {
+    height: 100%;
+  }
+
+  /* Desktop version */
+  @media (min-width: 1024px) {
+    .process-card::before {
+      left: auto;
+      top: auto;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: 2px;
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    // Staggered reveal for process cards
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!prefersReducedMotion) {
+      const cards = document.querySelectorAll('.process-card');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+
+      cards.forEach((card) => observer.observe(card));
+    }
+  })();
+</script>

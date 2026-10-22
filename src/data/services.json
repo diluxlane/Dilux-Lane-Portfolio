@@ -1,0 +1,22 @@
+[
+  {
+    "title": "Video Editing",
+    "desc": "Short-form, long-form, and social cuts — pacing, sound, colour, captions.",
+    "icon": 0
+  },
+  {
+    "title": "Colour Grading",
+    "desc": "A consistent, polished look across every shot — from raw footage to final grade.",
+    "icon": 1
+  },
+  {
+    "title": "Sound Design",
+    "desc": "Clean audio, music syncing, and sound effects that make an edit feel finished.",
+    "icon": 2
+  },
+  {
+    "title": "Social Media Cuts",
+    "desc": "Reels, shorts, and platform-ready edits sized and paced for how people actually watch.",
+    "icon": 3
+  }
+]
