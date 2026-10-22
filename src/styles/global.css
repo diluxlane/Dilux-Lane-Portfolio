@@ -1,0 +1,643 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Bebas Neue';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/bebas-neue-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('/fonts/inter-latin-variable.woff2') format('woff2');
+}
+
+@theme {
+  --color-bg: #0A0A0A;
+  --color-bg-secondary: #111111;
+  --color-accent: #C8A96B;
+  --color-accent-light: #E2C790;
+  --color-accent-dark: #9A7E47;
+  --color-text: #F0F0F0;
+  --color-text-muted: #808080;
+  --color-border: #1A1A1A;
+  --color-border-light: #252525;
+
+  --font-display: 'Bebas Neue', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out-expo: cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+/* ============================================
+   BASE STYLES
+   ============================================ */
+
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* ============================================
+   FIXED CONTACT BUTTON
+   ============================================ */
+
+@keyframes fct-ping {
+  0%   { transform: scale(1);   opacity: 0.6; }
+  100% { transform: scale(2.5); opacity: 0; }
+}
+
+.fct-ping {
+  animation: fct-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fct-ping {
+    animation: none;
+  }
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ============================================
+   TYPOGRAPHY
+   ============================================ */
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-body {
+  font-family: var(--font-body);
+}
+
+/* ============================================
+   PAGE LOADER
+   ============================================ */
+
+.page-loader {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transform: translateY(0);
+  transition: transform 0.7s var(--ease-in-out-expo);
+}
+
+.page-loader.loaded {
+  transform: translateY(-100%);
+}
+
+.page-loader-logo {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  letter-spacing: 0.3em;
+  color: var(--color-text);
+  margin-bottom: 2rem;
+}
+
+.page-loader-bar {
+  width: 200px;
+  height: 2px;
+  background: var(--color-border);
+  overflow: hidden;
+  border-radius: 1px;
+}
+
+.page-loader-progress {
+  width: 0%;
+  height: 100%;
+  background: var(--color-accent);
+  animation: loader-fill 0.8s var(--ease-out-expo) forwards;
+}
+
+@keyframes loader-fill {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+
+/* ============================================
+   NOISE TEXTURE OVERLAY (Fixed)
+   ============================================ */
+
+.noise-overlay-global {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.035;
+}
+
+.noise-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' seed='5'/%3E%3C/filter%3E%3Crect width='400' height='400' fill='%23000'/%3E%3Crect width='400' height='400' fill='%23fff' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+
+
+/* ============================================
+   DATA REVEAL ANIMATION SYSTEM
+   ============================================ */
+
+/* Default visible state (no JS fallback) */
+[data-reveal] {
+  opacity: 1;
+  transform: none;
+  transition: opacity 0.6s var(--ease-out-expo),
+              transform 0.6s var(--ease-out-expo);
+}
+
+/* JS-enabled initial hidden state */
+.js [data-reveal="fade-up"] {
+  opacity: 0;
+  transform: translateY(40px);
+}
+
+.js [data-reveal="fade-left"] {
+  opacity: 0;
+  transform: translateX(-40px);
+}
+
+.js [data-reveal="fade-right"] {
+  opacity: 0;
+  transform: translateX(40px);
+}
+
+.js [data-reveal="scale-in"] {
+  opacity: 0;
+  transform: scale(0.94);
+}
+
+/* Revealed state */
+[data-reveal].revealed {
+  opacity: 1;
+  transform: none;
+}
+
+[data-reveal="fade-left"].revealed,
+[data-reveal="fade-right"].revealed {
+  transform: translateX(0);
+}
+
+/* Line reveal (curtain) */
+[data-reveal="line"] .word {
+  display: inline-block;
+  overflow: hidden;
+}
+
+[data-reveal="line"] .word span {
+  display: inline-block;
+  transform: translateY(110%);
+  transition: transform 0.6s var(--ease-out-expo);
+}
+
+[data-reveal="line"].revealed .word span {
+  transform: translateY(0);
+}
+
+/* Stagger children */
+[data-reveal-stagger] > [data-reveal]:nth-child(1) { transition-delay: 0ms; }
+[data-reveal-stagger] > [data-reveal]:nth-child(2) { transition-delay: 100ms; }
+[data-reveal-stagger] > [data-reveal]:nth-child(3) { transition-delay: 200ms; }
+[data-reveal-stagger] > [data-reveal]:nth-child(4) { transition-delay: 300ms; }
+[data-reveal-stagger] > [data-reveal]:nth-child(5) { transition-delay: 400ms; }
+[data-reveal-stagger] > [data-reveal]:nth-child(6) { transition-delay: 500ms; }
+[data-reveal-stagger] > [data-reveal]:nth-child(7) { transition-delay: 600ms; }
+[data-reveal-stagger] > [data-reveal]:nth-child(8) { transition-delay: 700ms; }
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  .js [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  [data-reveal="line"] .word span {
+    transform: translateY(0) !important;
+  }
+}
+
+/* ============================================
+   LEGACY SCROLL ANIMATIONS (backwards compat)
+   ============================================ */
+
+.animate-on-scroll {
+  opacity: 1;
+  transform: translateY(20px);
+  transition: opacity 0.5s var(--ease-out-expo), transform 0.5s var(--ease-out-expo);
+}
+
+.animate-on-scroll.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.animate-on-scroll.fade-left {
+  transform: translateX(-30px);
+}
+
+.animate-on-scroll.fade-left.visible {
+  transform: translateX(0);
+}
+
+.animate-on-scroll.fade-right {
+  transform: translateX(30px);
+}
+
+.animate-on-scroll.fade-right.visible {
+  transform: translateX(0);
+}
+
+.animate-on-scroll.scale-in {
+  transform: scale(0.97);
+}
+
+.animate-on-scroll.scale-in.visible {
+  transform: scale(1);
+}
+
+/* Stagger children */
+.stagger-children > .animate-on-scroll:nth-child(1) { transition-delay: 0ms; }
+.stagger-children > .animate-on-scroll:nth-child(2) { transition-delay: 80ms; }
+.stagger-children > .animate-on-scroll:nth-child(3) { transition-delay: 160ms; }
+.stagger-children > .animate-on-scroll:nth-child(4) { transition-delay: 240ms; }
+.stagger-children > .animate-on-scroll:nth-child(5) { transition-delay: 320ms; }
+.stagger-children > .animate-on-scroll:nth-child(6) { transition-delay: 400ms; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-on-scroll {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ============================================
+   MARQUEE
+   ============================================ */
+
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-track {
+  display: flex;
+  gap: 1rem;
+  animation: marquee-scroll 25s linear infinite;
+  width: max-content;
+}
+
+.marquee-container:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Services/Brands Marquee */
+.marquee-text {
+  animation: marquee-scroll 30s linear infinite;
+}
+
+/* ============================================
+   CUSTOM SCROLLBAR
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border-light);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent);
+}
+
+/* ============================================
+   LIGHTBOX
+   ============================================ */
+
+body.lightbox-open {
+  overflow: hidden;
+}
+
+.lightbox-content {
+  position: relative;
+  width: 90%;
+  max-width: 400px;
+  aspect-ratio: 9 / 16;
+  max-height: 85vh;
+  z-index: 2010;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7);
+  transform: scale(0.94);
+  transition: transform 0.35s var(--ease-out-expo);
+}
+
+.lightbox-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  background: rgba(0, 0, 0, 0.6);
+  color: var(--color-text);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 2020;
+  transition: all 0.3s var(--ease-out-expo);
+}
+
+.lightbox-close:hover {
+  background: var(--color-accent);
+  color: var(--color-bg);
+  border-color: var(--color-accent);
+}
+
+#lightbox-video-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: #000;
+}
+
+#lightbox-video-container iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+/* ============================================
+   CAROUSEL
+   ============================================ */
+
+.carousel-track {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  padding: 0.25rem 0;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-item {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+.carousel-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* ============================================
+   GLASSMORPHISM
+   ============================================ */
+
+.glass {
+  background: rgba(17, 17, 17, 0.55);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* ============================================
+   FIXED CONTACT BUTTON
+   ============================================ */
+
+.fixed-contact-btn {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* ============================================
+   FOCUS STATES
+   ============================================ */
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+/* ============================================
+   SELECTION
+   ============================================ */
+
+::selection {
+  background: rgba(212, 175, 55, 0.25);
+  color: var(--color-text);
+}
+
+/* ============================================
+   FORM STYLES
+   ============================================ */
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.5;
+}
+
+/* ============================================
+   ROTATING TEXT CIRCLE
+   ============================================ */
+
+@keyframes rotate-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.rotating-circle {
+  animation: rotate-slow 12s linear infinite;
+}
+
+/* ============================================
+   SCROLL INDICATOR BOUNCE
+   ============================================ */
+
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+.scroll-dot-bounce {
+  animation: scroll-bounce 1.5s ease-in-out infinite;
+}
+
+/* ============================================
+   AVAILABILITY BADGE PULSE
+   ============================================ */
+
+@keyframes pulse-dot {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.7;
+  }
+}
+
+.availability-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* ============================================
+   DIVIDER LINE ANIMATION
+   ============================================ */
+
+@keyframes line-grow {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+
+.divider-animated {
+  transform-origin: top;
+  animation: line-grow 0.6s var(--ease-out-expo) forwards;
+}
+
+@keyframes dot-travel {
+  0% { top: 0; opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+.divider-dot {
+  animation: dot-travel 2s var(--ease-out-expo) forwards;
+}
+
+/* ============================================
+   VIDEO CARD HOVER
+   ============================================ */
+
+.video-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.video-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid transparent;
+  border-radius: inherit;
+  pointer-events: none;
+  transition: all 0.4s var(--ease-out-expo);
+  clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+}
+
+.video-card:hover::after {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  border-color: var(--color-accent);
+}
+
+/* ============================================
+   INPUT FOCUS ANIMATION
+   ============================================ */
+
+.input-animated {
+  position: relative;
+}
+
+.input-animated::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s var(--ease-out-expo);
+}
+
+.input-animated:focus-within::after {
+  transform: scaleX(1);
+}
+
+/* Accessibility and progressive enhancement without changing the design system. */
+html { scroll-padding-top: 100px; }
+body { overflow-wrap: break-word; }
+main { min-width: 0; }
+.js .animate-on-scroll:not(.visible) { opacity: 0; }
+.page-loader { display: none; }
+.js .page-loader { display: flex; }
+.skip-link { position: fixed; left: 1rem; top: 1rem; z-index: 11000; transform: translateY(-200%); padding: .75rem 1rem; background: var(--color-accent); color: var(--color-bg); border-radius: .5rem; }
+.skip-link:focus { transform: none; }
+.carousel-track { max-width: 100%; }
+.carousel-track:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 4px; }
+.carousel-prev:disabled, .carousel-next:disabled { opacity: .35; cursor: default; }
+.about-image { height: 100%; }
+.fixed-contact-btn { transition: opacity .3s; }
+body.menu-open .fixed-contact-btn { opacity: 0; pointer-events: none; }
+@media (prefers-reduced-motion: reduce) {
+  html, .carousel-track { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+  .js .animate-on-scroll:not(.visible) { opacity: 1; transform: none; }
+}
+
+.hero-parallax { width: 100%; height: 120%; object-fit: cover; }
+.contact-bg { width: 100%; height: 100%; object-fit: cover; }

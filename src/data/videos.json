@@ -1,0 +1,19 @@
+{
+  "description": "A few pieces will go here once they're organised — reels, brand videos, and cinematic edits.",
+  "categories": [
+    {
+      "id": "editing",
+      "title": "Video Editing",
+      "placeholderCount": 3,
+      "placeholderLabel": "Edit",
+      "videos": []
+    },
+    {
+      "id": "reels",
+      "title": "Talking Head / Reels",
+      "placeholderCount": 2,
+      "placeholderLabel": "Reel",
+      "videos": []
+    }
+  ]
+}

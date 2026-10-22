@@ -1,0 +1,88 @@
+{
+  "name": "Dilux Lane",
+  "role": "Videographer & Editor",
+  "title": "Dilux Lane — Video Editor",
+  "description": "Video editing for creators and businesses — pacing, colour, sound, and captions that make raw footage feel finished.",
+  "canonicalUrl": "",
+  "profileImage": "/dilux-portrait.jpg",
+  "portrait": {
+    "src": "/images/dilux-portrait-768.webp",
+    "srcset": "/images/dilux-portrait-480.webp 480w, /images/dilux-portrait-768.webp 768w, /images/dilux-portrait-1080.webp 1080w",
+    "alt": "Dilux Lane, videographer and video editor"
+  },
+  "hero": {
+    "headline": [
+      "CINEMATIC",
+      "EDITS."
+    ],
+    "availability": "Available for Projects",
+    "viewWork": "View Work",
+    "circle": "VIDEOGRAPHY · EDITING · BRANDING ·"
+  },
+  "about": {
+    "heading": "FROM ROUGH CUT TO SHIPPED.",
+    "paragraphs": [
+      "I transform ideas into cinematic visuals through clean, modern video editing. From short-form content and promotional videos to cinematic edits, I focus on storytelling, smooth pacing, and eye-catching visuals that leave a lasting impression.",
+      "Every project is crafted with creativity, precision, and attention to detail."
+    ],
+    "tool": "Edited on DaVinci Resolve",
+    "ticker": [
+      "Video Editing",
+      "Colour Grading",
+      "Sound Design",
+      "Social Cuts"
+    ]
+  },
+  "contact": {
+    "name": "Dilux Lane",
+    "phone": "+94 75 522 1163",
+    "email": "diluxlane@gmail.com",
+    "location": "Badulla District, Uva Province, Sri Lanka",
+    "whatsapp": "https://wa.me/94755221163",
+    "instagram": "https://insta.oia.bio/diluxln",
+    "heading": "LET'S BUILD SOMETHING GOOD",
+    "description": "Got footage that needs a story, or a channel that needs consistent edits? Send a note and let's talk it through.",
+    "availability": "Currently Accepting Projects",
+    "whatsappLabel": "WhatsApp Me"
+  },
+  "social": [
+    {
+      "name": "Instagram",
+      "url": "https://insta.oia.bio/diluxln",
+      "icon": "instagram"
+    },
+    {
+      "name": "TikTok",
+      "url": "https://tiktok.openinapp.link/diluxln",
+      "icon": "tiktok"
+    },
+    {
+      "name": "YouTube",
+      "url": "https://yt.oia.bio/diluxln",
+      "icon": "youtube"
+    }
+  ],
+  "navigation": [
+    {
+      "label": "Work",
+      "href": "#work"
+    },
+    {
+      "label": "About",
+      "href": "#about"
+    },
+    {
+      "label": "Services",
+      "href": "#services"
+    },
+    {
+      "label": "Process",
+      "href": "#process"
+    },
+    {
+      "label": "Contact",
+      "href": "#contact"
+    }
+  ],
+  "copyright": "© 2026 Dilux Lane. All rights reserved."
+}

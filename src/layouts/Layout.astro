@@ -1,0 +1,70 @@
+---
+import '../styles/global.css';
+import site from '../data/site.json';
+import VideoLightbox from '../components/VideoLightbox.astro';
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+const socialImage = Astro.site ? new URL(site.profileImage, Astro.site).href : undefined;
+const isPreview = import.meta.env.VERCEL_ENV === 'preview';
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{site.title}</title>
+    <meta name="description" content={site.description} />
+    <meta name="theme-color" content="#0A0A0A" />
+    {isPreview && <meta name="robots" content="noindex, nofollow" />}
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={site.title} />
+    <meta property="og:description" content={site.description} />
+    {canonical && <meta property="og:url" content={canonical} />}
+    {socialImage && <meta property="og:image" content={socialImage} />}
+    <meta property="og:image:alt" content={site.portrait.alt} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={site.title} />
+    <meta name="twitter:description" content={site.description} />
+    {socialImage && <meta name="twitter:image" content={socialImage} />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preload" href="/fonts/bebas-neue-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/inter-latin-variable.woff2" as="font" type="font/woff2" crossorigin />
+    <script is:inline>
+      document.documentElement.classList.add('js');
+      // Recover visible content if a module fails or the connection drops.
+      window.setTimeout(() => {
+        if (!document.body.hasAttribute('data-loaded')) {
+          document.documentElement.classList.remove('js');
+          document.getElementById('page-loader')?.remove();
+          document.body.setAttribute('data-loaded', 'true');
+        }
+      }, 4000);
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
+    <div class="page-loader" id="page-loader" aria-hidden="true">
+      <div class="page-loader-logo">{site.name.toUpperCase()}</div>
+      <div class="page-loader-bar"><div class="page-loader-progress"></div></div>
+    </div>
+    <svg class="noise-overlay-global" aria-hidden="true">
+      <filter id="noise-filter">
+        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
+        <feColorMatrix type="saturate" values="0" />
+      </filter>
+      <rect width="100%" height="100%" filter="url(#noise-filter)" />
+    </svg>
+    <a href="#get-in-touch"
+      class="fixed-contact-btn fixed bottom-6 right-5 z-[900] inline-flex items-center gap-2 px-5 py-3 rounded-full bg-[var(--color-accent)] text-[var(--color-bg)] font-semibold text-sm tracking-wide shadow-[0_4px_24px_rgba(200,169,107,0.35)] hover:bg-[var(--color-accent-light)] hover:shadow-[0_6px_32px_rgba(200,169,107,0.5)] transition-all duration-300"
+      aria-label="Let's Talk — Contact">
+      <span class="relative flex h-2 w-2 shrink-0" aria-hidden="true">
+        <span class="fct-ping absolute inline-flex h-full w-full rounded-full bg-[var(--color-bg)] opacity-60" />
+        <span class="relative inline-flex rounded-full h-2 w-2 bg-[var(--color-bg)]" />
+      </span>
+      Let's Talk
+    </a>
+    <slot />
+    <VideoLightbox />
+    <script src="../scripts/page.ts" />
+  </body>
+</html>

@@ -1,0 +1,109 @@
+---
+export interface Video {
+  id: string;
+  platform: string;
+  url: string;
+  title: string;
+  thumbnail: string;
+  label?: string;
+}
+export interface Props {
+  category: {
+    id: string;
+    title: string;
+    placeholderCount: number;
+    placeholderLabel: string;
+    videos: Video[];
+  };
+}
+const { category } = Astro.props;
+const slots = Math.max(0, category.placeholderCount - category.videos.length);
+---
+<div class="carousel-section" data-reveal="fade-up">
+  <div class="flex items-end justify-between mb-6 gap-3">
+    <div>
+      <h3 id={`heading-${category.id}`} class="font-display text-xl md:text-2xl lg:text-3xl tracking-wide text-[var(--color-text)]" data-reveal="fade-left">{category.title}</h3>
+      <p class="text-[var(--color-text-muted)] text-xs mt-1">
+        {category.videos.length ? `${category.videos.length} ${category.videos.length === 1 ? 'video' : 'videos'}` : 'Samples being organised'}
+      </p>
+    </div>
+    <div class="hidden md:flex items-center gap-2">
+      <button class="carousel-prev w-9 h-9 rounded-full border border-[var(--color-border-light)] bg-[var(--color-bg-secondary)]/60 flex items-center justify-center text-[var(--color-text-muted)] hover:text-[var(--color-accent)] hover:border-[var(--color-accent)]/40 transition-all duration-300"
+        data-target={category.id} aria-controls={`track-${category.id}`} aria-label={`Previous ${category.title} items`}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="15 18 9 12 15 6" /></svg>
+      </button>
+      <button class="carousel-next w-9 h-9 rounded-full border border-[var(--color-border-light)] bg-[var(--color-bg-secondary)]/60 flex items-center justify-center text-[var(--color-text-muted)] hover:text-[var(--color-accent)] hover:border-[var(--color-accent)]/40 transition-all duration-300"
+        data-target={category.id} aria-controls={`track-${category.id}`} aria-label={`Next ${category.title} items`}>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="9 18 15 12 9 6" /></svg>
+      </button>
+    </div>
+  </div>
+  <div class="relative -mx-6 md:-mx-12 lg:-mx-20 px-6 md:px-12 lg:px-20">
+    <div class="carousel-track" id={`track-${category.id}`} tabindex="0" role="region" aria-labelledby={`heading-${category.id}`}>
+      {category.videos.map((video) => (
+        <a href={video.url} target="_blank" rel="noopener noreferrer"
+          class="carousel-item video-card block flex-shrink-0 w-[260px] md:w-[280px] lg:w-[300px]"
+          data-video-id={video.id} data-platform={video.platform} data-url={video.url} data-title={video.title}
+          aria-label={`Play ${video.title}`}>
+          <div class="video-card-inner relative aspect-[9/16] rounded-2xl overflow-hidden bg-[var(--color-bg-secondary)] border border-[var(--color-border)] group transition-all duration-500 hover:border-[var(--color-accent)]/25 hover:shadow-[0_16px_48px_-12px_rgba(200,169,107,0.12)]">
+            <img src={video.thumbnail} alt={video.title} class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" decoding="async" width="540" height="960" />
+            {video.label && <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[var(--color-bg)]/80 text-[var(--color-accent)] text-[10px] border border-[var(--color-border-light)]">{video.label}</span>}
+            <div class="absolute inset-0 flex items-center justify-center" aria-hidden="true">
+              <div class="play-btn w-12 h-12 rounded-full bg-[var(--color-bg)]/60 backdrop-blur-md border border-white/10 flex items-center justify-center text-white transition-all duration-500 group-hover:bg-[var(--color-accent)] group-hover:text-[var(--color-bg)] group-hover:scale-110">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="8 5 19 12 8 19" /></svg>
+              </div>
+            </div>
+            <div class="absolute inset-0 bg-gradient-to-t from-[var(--color-bg)]/50 via-transparent to-transparent pointer-events-none" />
+            <div class="border-trace absolute inset-0 rounded-2xl pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          </div>
+        </a>
+      ))}
+      {Array.from({ length: slots }, (_, index) => (
+        <div class="carousel-item portfolio-placeholder flex-shrink-0 w-[260px] md:w-[280px] lg:w-[300px]">
+          <div class="relative aspect-[9/16] rounded-2xl overflow-hidden bg-[var(--color-bg-secondary)] border border-[var(--color-border)] flex flex-col items-center justify-center gap-4 px-6 text-center">
+            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-[var(--color-bg)]/80 text-[var(--color-accent)] text-[10px] font-semibold tracking-wide border border-[var(--color-border-light)]">{category.placeholderLabel}</span>
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--color-accent)" stroke-width="1" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 3v18M17 3v18M3 8h4M3 16h4M17 8h4M17 16h4"/></svg>
+            <p class="font-display text-xl tracking-wide text-[var(--color-text)]">Portfolio sample coming soon</p>
+            <p class="text-xs leading-relaxed text-[var(--color-text-muted)]">Awaiting project video and thumbnail.</p>
+            <span class="absolute bottom-4 text-[10px] tracking-widest text-[var(--color-text-muted)]">{String(index + 1).padStart(2, '0')} · PLACEHOLDER</span>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+<style>
+  .border-trace::before {
+    content: ''; position: absolute; inset: 0; border: 2px solid var(--color-accent); border-radius: inherit;
+  }
+</style>
+<script>
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll<HTMLElement>('.carousel-section').forEach((section) => {
+    const track = section.querySelector<HTMLElement>('.carousel-track');
+    const previous = section.querySelector<HTMLButtonElement>('.carousel-prev');
+    const next = section.querySelector<HTMLButtonElement>('.carousel-next');
+    if (!track || !previous || !next) return;
+    const update = () => {
+      const max = track.scrollWidth - track.clientWidth;
+      previous.disabled = track.scrollLeft <= 1;
+      next.disabled = track.scrollLeft >= max - 1;
+    };
+    const move = (direction: number) => {
+      const width = track.querySelector('.carousel-item')?.clientWidth || 260;
+      track.scrollBy({ left: (width + 16) * direction, behavior: reducedMotion ? 'instant' : 'smooth' });
+    };
+    previous.addEventListener('click', () => move(-1));
+    next.addEventListener('click', () => move(1));
+    track.addEventListener('scroll', update, { passive: true });
+    track.addEventListener('keydown', (event) => {
+      if (event.target !== track) return;
+      if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+        event.preventDefault();
+        move(event.key === 'ArrowRight' ? 1 : -1);
+      }
+    });
+    new ResizeObserver(update).observe(track);
+    update();
+  });
+</script>

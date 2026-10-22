@@ -1,0 +1,30 @@
+{
+  "name": "dilux-lane-portfolio",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Dilux Lane — video-editing portfolio",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "check": "astro check",
+    "build": "astro build",
+    "preview": "astro preview",
+    "test": "npm run build && node tests/browser-smoke.mjs"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "4.3.3",
+    "astro": "7.4.2",
+    "gsap": "3.15.0",
+    "tailwindcss": "4.3.3"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.4",
+    "axe-core": "4.14.0",
+    "playwright": "1.62.1",
+    "typescript": "^5.9.3"
+  }
+}
