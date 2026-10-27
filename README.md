@@ -1,113 +1,97 @@
-# Dilux Lane — Video Editor
+# Dilux Lane — Video Portfolio
 
-Static Astro portfolio with Tailwind CSS, GSAP and native scroll-snap carousels.
-No backend, analytics, form service or environment secrets are required.
+A responsive personal portfolio for **Dilux Lane**, focused on video editing, videography and visual storytelling.
 
-## Local development
+**Live website:** https://dilux-lane-portfolio.vercel.app
 
-Use Node.js 24.
+## Overview
 
-```sh
+This repository contains the production source for the Dilux Lane video portfolio. The site is built as a static, content-driven Astro project with smooth motion, responsive portfolio browsing and direct contact actions.
+
+The project does not require a backend, database, analytics service or private runtime credentials.
+
+## Highlights
+
+- Responsive portfolio experience for desktop, tablet and mobile.
+- Video/project content managed from structured data files.
+- Support for local video files, YouTube links and Instagram links.
+- GSAP-powered motion and interaction effects.
+- Native scroll-snap portfolio carousels.
+- WhatsApp contact flow that prepares a message for the visitor to review and send.
+- Keyboard, reduced-motion and accessibility considerations.
+- Browser smoke tests across common viewport sizes.
+
+## Tech Stack
+
+- **Astro 7** — static site framework
+- **Tailwind CSS 4** — styling utilities
+- **GSAP 3** — animation and interaction
+- **TypeScript tooling** — project checks
+- **Playwright + axe-core** — browser and accessibility verification
+- **Vercel** — hosting and Git-based deployment
+
+## Project Structure
+
+```text
+src/
+  data/       Portfolio content, services, process, stats and site information
+  styles/     Shared styling and design tokens
+public/       Images, fonts and public media
+tests/        Browser smoke tests
+docs/         Project and content documentation
+vercel.json   Vercel deployment configuration
+```
+
+Important content files include:
+
+- `src/data/site.json` — identity, navigation, contact and metadata
+- `src/data/services.json` — services and descriptions
+- `src/data/process.json` — workflow/process content
+- `src/data/stats.json` — owner-supplied statistics
+- `src/data/videos.json` — portfolio categories and media entries
+
+## Local Development
+
+**Requirement:** Node.js 24.x
+
+```bash
 npm ci
 npm run dev
 ```
 
-```sh
+Useful checks:
+
+```bash
 npm run check
 npm run build
-npm run preview
-```
-
-The production output is `dist/`. Do not commit that directory.
-
-## Editing content
-
-| File | Contents |
-| --- | --- |
-| `src/data/site.json` | Identity, hero, About, portrait, contact, socials, navigation and metadata |
-| `src/data/services.json` | The four services and descriptions |
-| `src/data/stats.json` | Existing owner-supplied statistics; update only with accurate information |
-| `src/data/process.json` | Five workflow steps |
-| `src/data/videos.json` | Portfolio introduction, categories, published videos and empty slots |
-| `src/styles/global.css` | Shared design tokens, typography and interaction styles |
-
-The original `public/dilux-portrait.jpg` is preserved. Display images use local
-480px, 768px and 1080px WebP derivatives. Bebas Neue and Inter are self-hosted;
-their OFL licenses are included in `public/fonts/`.
-
-### Adding your own portfolio media
-
-There are currently **no published project videos**. The five existing slots
-are explicitly labeled placeholders. They have no play controls or fake links.
-
-Put a thumbnail in `public/images/` and add an entry to the appropriate category's
-`videos` array. Replace the example values below with your actual work:
-
-```json
-{
-  "id": "my-project",
-  "platform": "video",
-  "url": "/videos/my-project.mp4",
-  "title": "Your actual project title",
-  "thumbnail": "/images/my-project.webp",
-  "label": "Edit"
-}
-```
-
-Supported platforms are `video` (same-origin MP4/WebM), `youtube` (watch, shorts
-or youtu.be URL), and `instagram` (reel or post URL). A title and local thumbnail
-are required. Use unique IDs. The `placeholderCount` is the initial number of
-slots, not a claim about completed work; placeholders disappear as real entries
-replace them. Set it to zero to show only published videos.
-
-Videos and social embeds are requested only when a real project is opened.
-The player provides an original-link fallback, keyboard focus containment,
-Escape to close, and playback cleanup. Links still work without JavaScript.
-Embedded players receive their own keyboard events; tab back to the dialog
-controls before using Escape, or use the visible Close video button.
-
-### Contact
-
-The contact form opens a draft at the WhatsApp number in `site.json`. Visitors
-review and send that draft inside WhatsApp. The page does not send messages,
-store submissions, or claim that a message has been delivered. Direct phone,
-email and WhatsApp links remain available.
-
-## Browser verification
-
-```sh
-npx playwright install chromium
 npm test
 ```
 
-The test starts a temporary localhost server for the built `dist/` directory.
-It checks 320, 375, 390, 430, 768, 1024, 1440 and 1920px widths, mobile menus,
-keyboard and touch carousels, contact drafts, player behavior, reduced motion,
-JavaScript-disabled fallbacks and accessibility. Screenshots and results go to
-the ignored `test-results/` directory. WhatsApp navigation and player requests
-are intercepted during tests; no real message is sent.
+The production build is generated in `dist/`.
 
-For an existing Chromium installation, set
-`PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` to its executable path.
+## Deployment
 
-## Vercel
+The repository is connected to Vercel and configured through `vercel.json`.
 
-The repository's `vercel.json` declares:
+**Production URL:** https://dilux-lane-portfolio.vercel.app
 
-- Framework: Astro
-- Install: `npm ci`
-- Build: `npm run build`
-- Output: `dist`
+The project is fully static and does not require server-side environment variables for normal operation.
 
-The project is entirely static and needs no Vercel adapter. Keep `main` as the
-production branch; use the migration branch's Git preview for review before
-merging. The migration does not change any production project setting.
+## Media and Content
 
-Set `canonicalUrl` in `site.json` to your verified production URL when known.
-If it is empty, builds use Vercel's `VERCEL_PROJECT_PRODUCTION_URL` when
-available. Without either value, canonical and absolute image metadata are
-omitted instead of pointing to an invented domain. Preview builds are marked
-`noindex, nofollow` when `VERCEL_ENV=preview` is provided by Vercel.
+Portfolio entries are data-driven. Published media should use accurate titles, thumbnails and original links. Placeholder slots are intentionally separate from published work and should not be presented as completed projects.
 
-See `docs/content-migration.md` for the complete content mapping, excluded source
-material and intentional adaptations.
+The contact interface opens a WhatsApp draft; the website itself does not send or store the message.
+
+## Credits
+
+- Designed and maintained for **Dilux Lane**.
+- Astro, Tailwind CSS, GSAP, Playwright and other dependencies remain subject to their respective upstream licenses.
+- **Bebas Neue** and **Inter** are self-hosted; their OFL license files are included with the font assets.
+- Third-party platforms, trademarks and embedded media remain the property of their respective owners.
+
+## Copyright and License
+
+No repository-wide open-source license is provided. Public visibility of this repository does not by itself grant permission to reuse the site-specific design, personal content, portfolio media or branding.
+
+Unless a file or asset states otherwise, reuse should be authorized by the relevant rights holder. Third-party software, fonts, media and trademarks retain their original licenses and ownership.
